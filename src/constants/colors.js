@@ -1,7 +1,8 @@
-export const baseColor = "#4D628C";
-export const accentColor = "#6BB0E5";
-export const backgroundColor = "#E5E5E5";
+export const baseColor = "#426789";
+export const accentColor = "#69A9D5";
+export const backgroundColor = "#EFEFEF";
 export const textColor = "#666666";
+export const inputTextColor = "#DBDBDB";
 
 export const dayColors = {
   complete: { background: "#8AC254", border: "#8AC254" },

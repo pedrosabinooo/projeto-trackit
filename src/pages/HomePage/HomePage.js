@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../components/Logo/Logo";
 import { accentColor } from "../../constants/colors";
 
 export default function HomePage() {
   const [userInfo, setUserInfo] = useState({});
+  const navigate = useNavigate();
 
   function login(e) {
     e.preventDefault();
-    console.log("Clicou!");
+    navigate("/today");
   }
 
   function handleForm(e) {
@@ -19,14 +20,14 @@ export default function HomePage() {
   return (
     <HomePageStyled>
       <Logo />
-      <LogInFormStyled onSubmit={login}>
+      <form onSubmit={login}>
         <input
           id="email"
           name="email"
           value={userInfo.email || ""}
           onChange={handleForm}
           placeholder="email"
-          required
+          // required // FIXME: deixar required
         />
         <input
           id="password"
@@ -35,10 +36,10 @@ export default function HomePage() {
           value={userInfo.password || ""}
           onChange={handleForm}
           placeholder="password"
-          required
+          // required // FIXME: deixar required
         />
         <button type="submit">Log in</button>
-      </LogInFormStyled>
+      </form>
       <Link to="/signup">Don't have an account? Sign up!</Link>
     </HomePageStyled>
   );
@@ -58,10 +59,4 @@ const HomePageStyled = styled.div`
       filter: brightness(0.6);
     }
   }
-`;
-const LogInFormStyled = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 303px;
 `;

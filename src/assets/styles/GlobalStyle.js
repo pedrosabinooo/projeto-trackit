@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
-import { accentColor } from "../../constants/colors";
+import { accentColor, backgroundColor, inputTextColor, textColor } from "../../constants/colors";
+import { footerHeight, navBarHeight } from "../../constants/dimensions";
 
 const GlobalStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,
@@ -56,6 +57,7 @@ const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
         font-family: 'Lexend Deca', sans-serif;
+        color: ${textColor};
     }
     
     button {
@@ -75,21 +77,39 @@ const GlobalStyle = createGlobalStyle`
     
     input {
         background: #FFFFFF;
-        border: 1px solid #DBDBDB;
+        border: 1px solid ${inputTextColor};
         border-radius: 5px;
         height: 45px;
         width: 100%;
         margin-bottom: 6px;
         padding: 0 10px;
-        font-family: 'Roboto';
+        font-family: 'Lexend Deca', sans-serif;
         font-size: 18px;
         display: flex;
         align-items: center;
         &::placeholder{
-            font-family: 'Lexend Deca', sans-serif;
-            color: #DBDBDB;
+            color: ${inputTextColor};
         }
     }
+
+    .habits-page, .today-page, .history-page{
+        padding: calc(${navBarHeight} + 22px) 18px calc(${footerHeight} + 30px) 18px;
+        background: ${backgroundColor};
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 100%;
+        span{
+            line-height: 23px;
+        }
+    }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 303px;
+  }
 `;
 
 export default GlobalStyle;

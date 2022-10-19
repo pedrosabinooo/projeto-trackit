@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../components/Logo/Logo";
 import { accentColor } from "../../constants/colors";
 
 export default function SignUpPage() {
   const [userInfo, setUserInfo] = useState({});
+  const navigate = useNavigate();
 
   function signup(e) {
     e.preventDefault();
-    console.log("Clicou!");
+    navigate("/");
   }
 
   function handleForm(e) {
@@ -19,14 +20,14 @@ export default function SignUpPage() {
   return (
     <HomePageStyled>
       <Logo />
-      <SignUpFormStyled onSubmit={signup}>
+      <form onSubmit={signup}>
         <input
           id="email"
           name="email"
           value={userInfo.email || ""}
           onChange={handleForm}
           placeholder="email"
-          required
+          // required // FIXME: deixar required
         />
         <input
           id="password"
@@ -35,7 +36,7 @@ export default function SignUpPage() {
           value={userInfo.password || ""}
           onChange={handleForm}
           placeholder="password"
-          required
+          // required // FIXME: deixar required
         />
         <input
           id="name"
@@ -43,7 +44,7 @@ export default function SignUpPage() {
           value={userInfo.name || ""}
           onChange={handleForm}
           placeholder="name"
-          required
+          // required // FIXME: deixar required
         />
         <input
           id="photo"
@@ -51,10 +52,10 @@ export default function SignUpPage() {
           value={userInfo.photo || ""}
           onChange={handleForm}
           placeholder="photo"
-          required
+          // required // FIXME: deixar required
         />
         <button type="submit">Sign up</button>
-      </SignUpFormStyled>
+      </form>
       <Link to="/">Already have an account? Log in!</Link>
     </HomePageStyled>
   );
@@ -74,10 +75,4 @@ const HomePageStyled = styled.div`
       filter: brightness(0.6);
     }
   }
-`;
-const SignUpFormStyled = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 303px;
 `;
