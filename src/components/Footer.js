@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { accentColor } from "../../constants/colors";
-import { footerHeight } from "../../constants/dimensions";
+import { accentColor } from "../constants/colors";
+import { footerHeight } from "../constants/dimensions";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 export default function Footer() {
   const navigate = useNavigate();
@@ -9,7 +11,18 @@ export default function Footer() {
     <FooterStyled>
       <button onClick={() => navigate("/habits")}>Habits</button>
       <button onClick={() => navigate("/today")} className="today">
-        Today
+        <CircularProgressbar
+          value={67}
+          text={"Today"}
+          background
+          backgroundPadding={6}
+          styles={buildStyles({
+            backgroundColor: accentColor,
+            textColor: "white",
+            pathColor: "white",
+            trailColor: "transparent",
+          })}
+        />
       </button>
       <button onClick={() => navigate("/history")}>History</button>
     </FooterStyled>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import Footer from "../../components/Footer/Footer";
-import NavBar from "../../components/NavBar/NavBar";
-import { baseColor } from "../../constants/colors";
+import Footer from "../components/Footer";
+import NavBar from "../components/NavBar";
+import { baseColor } from "../constants/colors";
 
 export default function HistoryPage() {
   return (

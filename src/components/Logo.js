@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import LogoImage from "../../assets/images/color-logo512.png";
-import { baseColor } from "../../constants/colors";
+import LogoImage from "../assets/images/color-logo512.png";
+import { baseColor } from "../constants/colors";
 
 
 export default function Logo() {

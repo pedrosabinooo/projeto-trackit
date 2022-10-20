@@ -1,14 +1,18 @@
 import styled from "styled-components";
-import { baseColor } from "../../constants/colors";
-import MiniLogo from "../../assets/images/white-logo64.png";
-import UserPhoto from "../../assets/images/user-photo-default64.png";
-import { navBarHeight } from "../../constants/dimensions";
+import { baseColor } from "../constants/colors";
+import MiniLogo from "../assets/images/white-logo64.png";
+import UserPhoto from "../assets/images/user-photo-default64.png";
+import { navBarHeight } from "../constants/dimensions";
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext";
 
 export default function NavBar() {
+  const { userInfo } = useContext(UserContext);
+
   return (
     <NavBarStyled>
       <img src={MiniLogo} alt="Logo" />
-      <img src={UserPhoto} alt="ProfilePic" />
+      <img src={!userInfo.image ? UserPhoto : userInfo.image} alt="ProfilePic" />
     </NavBarStyled>
   );
 }

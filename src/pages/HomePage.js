@@ -1,20 +1,31 @@
-import { useState } from "react";
+import axios from "axios";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Logo from "../../components/Logo/Logo";
-import { accentColor } from "../../constants/colors";
+import Logo from "../components/Logo";
+import { accentColor } from "../constants/colors";
+import { BASE_URL } from "../constants/urls";
+import UserContext from "../contexts/UserContext";
 
 export default function HomePage() {
-  const [userInfo, setUserInfo] = useState({});
+  const { userInfo, setUserInfo } = useContext(UserContext);
+  const [loginInfo, setLoginInfo] = useState({});
   const navigate = useNavigate();
 
   function login(e) {
     e.preventDefault();
-    navigate("/today");
+    const body = {email: loginInfo.email, password:loginInfo.password}
+    axios
+      .post(`${BASE_URL}auth/login`, body)
+      .then((r) => {
+        setUserInfo({...userInfo, id: r.data.id, token: r.data.token})
+        navigate("/today")
+    })
+      .catch((e) => console.log(e.response.data));
   }
 
   function handleForm(e) {
-    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
+    setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   }
 
   return (
@@ -24,19 +35,19 @@ export default function HomePage() {
         <input
           id="email"
           name="email"
-          value={userInfo.email || ""}
+          value={loginInfo.email || ""}
           onChange={handleForm}
           placeholder="email"
-          // required // FIXME: deixar required
+          required
         />
         <input
           id="password"
           type="password"
           name="password"
-          value={userInfo.password || ""}
+          value={loginInfo.password || ""}
           onChange={handleForm}
           placeholder="password"
-          // required // FIXME: deixar required
+          required
         />
         <button type="submit">Log in</button>
       </form>

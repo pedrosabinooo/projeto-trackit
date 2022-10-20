@@ -1,16 +1,23 @@
-import { useState } from "react";
+import axios from "axios";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Logo from "../../components/Logo/Logo";
-import { accentColor } from "../../constants/colors";
+import Logo from "../components/Logo";
+import { accentColor } from "../constants/colors";
+import { BASE_URL } from "../constants/urls";
+import UserContext from "../contexts/UserContext";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function SignUpPage() {
-  const [userInfo, setUserInfo] = useState({});
+  const { userInfo, setUserInfo } = useContext(UserContext);
   const navigate = useNavigate();
 
   function signup(e) {
     e.preventDefault();
-    navigate("/");
+    axios
+      .post(`${BASE_URL}auth/sign-up`, userInfo)
+      .then(() => navigate("/"))
+      .catch((e) => console.log(e.response.data));
   }
 
   function handleForm(e) {
@@ -27,7 +34,7 @@ export default function SignUpPage() {
           value={userInfo.email || ""}
           onChange={handleForm}
           placeholder="email"
-          // required // FIXME: deixar required
+          required // FIXME: deixar required
         />
         <input
           id="password"
@@ -36,7 +43,7 @@ export default function SignUpPage() {
           value={userInfo.password || ""}
           onChange={handleForm}
           placeholder="password"
-          // required // FIXME: deixar required
+          required // FIXME: deixar required
         />
         <input
           id="name"
@@ -44,14 +51,14 @@ export default function SignUpPage() {
           value={userInfo.name || ""}
           onChange={handleForm}
           placeholder="name"
-          // required // FIXME: deixar required
+          required // FIXME: deixar required
         />
         <input
-          id="photo"
-          name="photo"
-          value={userInfo.photo || ""}
+          id="image"
+          name="image"
+          value={userInfo.image || ""}
           onChange={handleForm}
-          placeholder="photo"
+          placeholder="image"
           // required // FIXME: deixar required
         />
         <button type="submit">Sign up</button>

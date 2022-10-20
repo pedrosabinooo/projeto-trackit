@@ -1,12 +1,13 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Footer from "../../components/Footer/Footer";
-import NavBar from "../../components/NavBar/NavBar";
-import { accentColor, baseColor, inputTextColor } from "../../constants/colors";
+import Footer from "../components/Footer";
+import NavBar from "../components/NavBar";
+import { accentColor, baseColor, inputTextColor } from "../constants/colors";
 
 export default function HabitsPage() {
-  const [habits, setHabits] = useState([]);
+  const [habits, setHabits] = useState(undefined);
   const weekdays = ["M", "T", "W", "T", "F", "S", "S"];
+  if (false) setHabits([]);
   function Habits() {
     if (!habits) {
       return (
@@ -24,7 +25,9 @@ export default function HabitsPage() {
               <button className="weekday">{d}</button>
             ))}
           </Weekdays>
-          <button className="delete"><ion-icon name="trash-outline" color="white"></ion-icon></button>
+          <button className="delete">
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
         </HabitCard>
       );
     }
@@ -34,9 +37,10 @@ export default function HabitsPage() {
       <NavBar />
       <TitleBarStyled>
         <span>My habits</span>
-        <button>+</button>
+        <button>-</button>
       </TitleBarStyled>
       <NewHabitCard>
+        <aside></aside>
         <input type="text" name="input" placeholder="habit name" />
         <Weekdays>
           {weekdays.map((d) => (
@@ -48,6 +52,8 @@ export default function HabitsPage() {
           <button>Save</button>
         </ConfirmationButtons>
       </NewHabitCard>
+      <Habits />
+      <Habits />
       <Habits />
       <Footer />
     </main>
@@ -65,11 +71,16 @@ const TitleBarStyled = styled.div`
     color: ${baseColor};
   }
   button {
+    z-index: 5;
+    font-size: 23px;
     width: 40px;
     height: 35px;
+    background: white;
+    color: ${accentColor};
   }
 `;
 const NewHabitCard = styled.div`
+  position: relative;
   background: white;
   border-radius: 5px;
   margin-bottom: 20px;
@@ -82,6 +93,14 @@ const NewHabitCard = styled.div`
     color: ${inputTextColor};
     width: 30px;
     height: 30px;
+  }
+  aside {
+    position: absolute;
+    right: 0;
+    top: -25px;
+    width: 40px;
+    height:30px;
+    background: white;
   }
 `;
 const Weekdays = styled.div`
@@ -121,12 +140,17 @@ const HabitCard = styled.div`
     width: 25px;
     height: 25px;
   }
+
   .delete {
     position: absolute;
     top: 0;
     right: 0;
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 40px;
     border-radius: 0 5px;
+    ion-icon {
+      color: white;
+      font-size: 15px;
+    }
   }
 `;
