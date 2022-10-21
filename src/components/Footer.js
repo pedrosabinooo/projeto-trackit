@@ -9,8 +9,8 @@ export default function Footer() {
   const navigate = useNavigate();
   return (
     <FooterStyled>
-      <button onClick={() => navigate("/habits")}>Habits</button>
-      <button onClick={() => navigate("/today")} className="today">
+      <button onClick={() => navigate("/habits")}><p className="habits">Habits</p></button>
+      <button className="today" onClick={() => navigate("/today")}>
         <CircularProgressbar
           value={67}
           text={"Today"}
@@ -24,7 +24,7 @@ export default function Footer() {
           })}
         />
       </button>
-      <button onClick={() => navigate("/history")}>History</button>
+      <button onClick={() => navigate("/history")}><p className="history">History</p></button>
     </FooterStyled>
   );
 }
@@ -43,7 +43,6 @@ const FooterStyled = styled.div`
     background: white;
     z-index: 1;
     padding: 0;
-    color: ${accentColor};
     align-items: center;
     height: 100%;
     border: none;
@@ -52,6 +51,15 @@ const FooterStyled = styled.div`
     &:hover {
       filter: brightness(0.9);
     }
+  }
+  p {
+    color: ${accentColor};
+  }
+  .habits {
+    margin-right: 10%;
+  }
+  .history {
+    margin-left: 10%;
   }
   .today {
     position: absolute;

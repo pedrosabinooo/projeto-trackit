@@ -1,5 +1,10 @@
 import { createGlobalStyle } from "styled-components";
-import { accentColor, backgroundColor, inputTextColor, textColor } from "../../constants/colors";
+import {
+  accentColor,
+  backgroundColor,
+  inputTextColor,
+  textColor,
+} from "../../constants/colors";
 import { footerHeight, navBarHeight } from "../../constants/dimensions";
 
 const GlobalStyle = createGlobalStyle`
@@ -97,19 +102,24 @@ const GlobalStyle = createGlobalStyle`
         background: ${backgroundColor};
         display: flex;
         flex-direction: column;
-        height: 100vh;
+        height: 100%;
         width: 100%;
+        overflow-y: scroll;
         span{
             line-height: 23px;
         }
     }
 
-  form {
+    form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 303px;
-  }
+    }
+
+    div {
+    cursor: default;
+    }
 `;
 
 export default GlobalStyle;

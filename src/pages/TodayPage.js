@@ -2,30 +2,40 @@ import { useState } from "react";
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
-import { baseColor, inputTextColor } from "../constants/colors";
+import { baseColor, doneHabit, undoneHabit } from "../constants/colors";
 
 export default function TodayPage() {
-  const [habits, setHabits] = useState([]);
+  const [habits, setHabits] = useState([
+    {
+      id: 3,
+      name: "Work",
+      done: true,
+      currentSequence: 1,
+      highestSequence: 1,
+    },
+  ]);
   if (false) setHabits([]);
   function Habits() {
     if (!habits) {
-      return (
-        <>
-          <span>There's no habit to be tracked for today.</span>
-        </>
-      );
+      return <span>LOADING...</span>;
+    } else if (habits.length === 0) {
+      return <span>There's no habits to be tracked for today.</span>;
     } else {
       return (
-        <HabitCard>
-          <div>
-            <p className="habit-name">Habit name</p>
-            <p className="streak">{`Current streak: 4 days`}</p>
-            <p className="streak">{`Max. streak: 5 days`}</p>
-          </div>
-          <button>
-            <ion-icon name="checkbox"></ion-icon>
-          </button>
-        </HabitCard>
+        <>
+          {habits.map((habit) => (
+            <HabitCard key={habit.id} done={habit.done}>
+              <div>
+                <p className="habit-name">{habit.name}</p>
+                <p className="streak">{`Current streak: ${habit.currentSequence} days`}</p>
+                <p className="streak">{`Max. streak: ${habit.highestSequence} days`}</p>
+              </div>
+              <button>
+                <ion-icon name="checkbox"></ion-icon>
+              </button>
+            </HabitCard>
+          ))}
+        </>
       );
     }
   }
@@ -36,8 +46,6 @@ export default function TodayPage() {
         <span>{`Monday, 17/05`}</span>
         <p>{`67% of habits complete`}</p>
       </TitleBarStyled>
-      <Habits />
-      <Habits />
       <Habits />
       <Footer />
     </main>
@@ -88,6 +96,6 @@ const HabitCard = styled.div`
   }
   ion-icon {
     font-size: 69px;
-    color: ${inputTextColor};
+    color: ${(props) => (props.done ? doneHabit : undoneHabit)};
   }
 `;

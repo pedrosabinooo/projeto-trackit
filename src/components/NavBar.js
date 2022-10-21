@@ -8,7 +8,7 @@ import UserContext from "../contexts/UserContext";
 
 export default function NavBar() {
   const { userInfo } = useContext(UserContext);
-
+  
   return (
     <NavBarStyled>
       <img src={MiniLogo} alt="Logo" />
@@ -21,6 +21,7 @@ const NavBarStyled = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 10;
   background: ${baseColor};
   display: flex;
   align-items: center;
