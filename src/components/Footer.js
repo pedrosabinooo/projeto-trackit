@@ -4,15 +4,24 @@ import { accentColor } from "../constants/colors";
 import { footerHeight } from "../constants/dimensions";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useContext } from "react";
+import HabitsCompletionContext from "../contexts/HabitsCompletionContext";
 
 export default function Footer() {
+  const { percentage } = useContext(HabitsCompletionContext);
+
   const navigate = useNavigate();
   return (
     <FooterStyled>
-      <button onClick={() => navigate("/habits")}><p className="habits">Habits</p></button>
+      <button
+        onClick={() => navigate("/habits")}
+        data-identifier="habit-page-action"
+      >
+        <p className="habits">Habits</p>
+      </button>
       <button className="today" onClick={() => navigate("/today")}>
         <CircularProgressbar
-          value={67}
+          value={percentage}
           text={"Today"}
           background
           backgroundPadding={6}
@@ -24,7 +33,12 @@ export default function Footer() {
           })}
         />
       </button>
-      <button onClick={() => navigate("/history")}><p className="history">History</p></button>
+      <button
+        onClick={() => navigate("/history")}
+        data-identifier="historic-page-action"
+      >
+        <p className="history">History</p>
+      </button>
     </FooterStyled>
   );
 }

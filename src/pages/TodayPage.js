@@ -1,36 +1,87 @@
-import { useState } from "react";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import { baseColor, doneHabit, undoneHabit } from "../constants/colors";
+import { BASE_URL } from "../constants/urls";
+import UserContext from "../contexts/UserContext";
+import dayjs from "dayjs";
+import HabitsCompletionContext from "../contexts/HabitsCompletionContext";
 
 export default function TodayPage() {
-  const [habits, setHabits] = useState([
-    {
-      id: 3,
-      name: "Work",
-      done: true,
-      currentSequence: 1,
-      highestSequence: 1,
+  const { userInfo, setUserInfo } = useContext(UserContext);
+  const { percentage, setPercentage } = useContext(HabitsCompletionContext);
+  const [todayHabits, setTodayHabits] = useState([]);
+
+  useEffect(() => {
+    const userInfoStringfied = localStorage.getItem("user");
+    if (userInfoStringfied) {
+      const userInfoParsed = JSON.parse(userInfoStringfied);
+      setUserInfo(userInfoParsed);
+    }
+  }, [setUserInfo]);
+
+  const config = {
+    headers: {
+      Authorization: "Bearer " + userInfo.token,
     },
-  ]);
-  if (false) setHabits([]);
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}habits/today`, config)
+      .then((res) => {
+        setTodayHabits([...res.data]);
+        getPercentageDone();
+      })
+      .catch((err) => console.log(err.response.data));
+  }, []);
+
+  function getPercentageDone() {
+    const countDoneHabits = todayHabits.filter(
+      (todayHabit) => todayHabit.done
+    ).length;
+    const countTotalHabits = todayHabits.length;
+
+    setPercentage(((countDoneHabits / countTotalHabits) * 100).toFixed(2));
+  }
+
+  function changeHabitStatus(habitId, isChecked) {
+    axios
+      .post(
+        `${BASE_URL}habits/${habitId}/${isChecked ? "uncheck" : "check"}`,
+        "",
+        config
+      )
+      .then()
+      .catch((err) => console.log(err.response.data));
+  }
+
   function Habits() {
-    if (!habits) {
+    if (!todayHabits) {
       return <span>LOADING...</span>;
-    } else if (habits.length === 0) {
+    } else if (todayHabits.length === 0) {
+      console.log(todayHabits);
       return <span>There's no habits to be tracked for today.</span>;
     } else {
       return (
         <>
-          {habits.map((habit) => (
-            <HabitCard key={habit.id} done={habit.done}>
+          {todayHabits.map((habit) => (
+            <HabitCard
+              key={habit.id}
+              done={habit.done}
+              data-identifier="today-infos"
+            >
               <div>
                 <p className="habit-name">{habit.name}</p>
                 <p className="streak">{`Current streak: ${habit.currentSequence} days`}</p>
                 <p className="streak">{`Max. streak: ${habit.highestSequence} days`}</p>
               </div>
-              <button>
+              <button
+                onClick={() => changeHabitStatus(habit.id, habit.done)}
+                data-identifier="done-habit-btn"
+              >
                 <ion-icon name="checkbox"></ion-icon>
               </button>
             </HabitCard>
@@ -39,12 +90,19 @@ export default function TodayPage() {
       );
     }
   }
+
   return (
     <main className="today-page">
       <NavBar />
       <TitleBarStyled>
-        <span>{`Monday, 17/05`}</span>
-        <p>{`67% of habits complete`}</p>
+        <span data-identifier="today-infos">
+          {dayjs().format("dddd, MM/DD")}
+        </span>
+        <p data-identifier="today-infos">
+          {percentage || percentage === 0
+            ? "No habits completed yet"
+            : `${percentage * 100}% of habits complete`}
+        </p>
       </TitleBarStyled>
       <Habits />
       <Footer />

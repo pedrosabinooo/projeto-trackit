@@ -15,28 +15,34 @@ export default function SignUpPage() {
 
   function signup(e) {
     e.preventDefault();
+    setLoading(!loading);
     axios
       .post(`${BASE_URL}auth/sign-up`, userInfo)
-      .then(() => navigate("/")) //FIXME Ajustar erro da foto
+      .then((res) => {
+        console.log(res.data);
+        setLoading(!loading);
+        navigate("/"); //FIXME Ajustar erro da foto
+      })
       .catch((err) => {
-        alert(err.response.data);
-        setLoading(!loading)
+        setLoading(!loading); //FIXME Botão e input não estão voltando a ficar habilitados
         setUserInfo({});
-        //TODO Habilitar botão e inputs
+        alert(err.response.data);
       });
-    setLoading(!loading);
-    //TODO Desabilitar botão e inputs
   }
-
+  
   function SignUpButton() {
     if (loading) {
       return (
-        <button type="submit">
+        <button type="submit" disabled={loading}>
           <Loader />
         </button>
       );
     } else {
-      return <button type="submit">Sign up</button>;
+      return (
+        <button type="submit" onClick={() => setLoading(!loading)}>
+          Sign up
+        </button>
+      );
     }
   }
 
@@ -54,7 +60,9 @@ export default function SignUpPage() {
           value={userInfo.email || ""}
           onChange={handleForm}
           placeholder="email"
-          required // FIXME: deixar required
+          disabled={loading}
+          required
+          data-identifier="input-email"
         />
         <input
           id="password"
@@ -63,7 +71,9 @@ export default function SignUpPage() {
           value={userInfo.password || ""}
           onChange={handleForm}
           placeholder="password"
-          required // FIXME: deixar required
+          disabled={loading}
+          required
+          data-identifier="input-password"
         />
         <input
           id="name"
@@ -71,7 +81,9 @@ export default function SignUpPage() {
           value={userInfo.name || ""}
           onChange={handleForm}
           placeholder="name"
-          required // FIXME: deixar required
+          disabled={loading}
+          required
+          data-identifier="input-name"
         />
         <input
           id="image"
@@ -79,11 +91,12 @@ export default function SignUpPage() {
           value={userInfo.image || ""}
           onChange={handleForm}
           placeholder="image"
-          // required // FIXME: deixar required
+          disabled={loading}
+          data-identifier="input-photo"
         />
         <SignUpButton />
       </form>
-      <Link to="/">Already have an account? Log in!</Link>
+      <Link to="/" data-identifier="back-to-login-action">Already have an account? Log in!</Link>
     </HomePageStyled>
   );
 }

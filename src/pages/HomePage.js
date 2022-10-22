@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Loader from "../components/Loader";
@@ -9,10 +9,37 @@ import { BASE_URL } from "../constants/urls";
 import UserContext from "../contexts/UserContext";
 
 export default function HomePage() {
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const { setUserInfo } = useContext(UserContext);
   const [loginInfo, setLoginInfo] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   var hours = 12; // to clear the localStorage after "hours" hours
+  //   var now = new Date().getTime();
+  //   var setupTime = localStorage.getItem("setupTime");
+  //   if (setupTime === null) {
+  //     localStorage.setItem("setupTime", now);
+  //   } else {
+  //     if (now - setupTime > hours * 60 * 60 * 1000) {
+  //       localStorage.clear();
+  //       localStorage.setItem("setupTime", now);
+  //     }
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   const userInfoStringfied = localStorage.getItem("user");
+  //   if (userInfoStringfied) {
+  //     const userInfoParsed = JSON.parse(userInfoStringfied);
+  //     setUserInfo(userInfoParsed);
+  //     setLoginInfo({
+  //       email: userInfoParsed.email,
+  //       password: userInfoParsed.password,
+  //     });
+  //     login();
+  //   }
+  // }, [login, setLoginInfo, setUserInfo]);
 
   function login(e) {
     e.preventDefault();
@@ -20,27 +47,26 @@ export default function HomePage() {
     axios
       .post(`${BASE_URL}auth/login`, body)
       .then((r) => {
-        setUserInfo({ ...userInfo, id: r.data.id, token: r.data.token });
+        setUserInfo({ ...r.data });
+        // localStorage.setItem("user", JSON.stringify({ ...r.data }));
         navigate("/today");
       })
       .catch((e) => {
-        console.log(e.response.data)
+        console.log(e.response.data);
         setLoading(!loading);
-        //TODO Habilitar botão e inputs
       });
     setLoading(!loading);
-    //TODO Desabilitar botão e inputs
   }
 
   function LogInButton() {
     if (loading) {
       return (
-        <button type="submit">
+        <button type="submit" disabled={loading} data-identifier="login-btn">
           <Loader />
         </button>
       );
     } else {
-      return <button type="submit">Log in</button>;
+      return <button type="submit" data-identifier="login-btn">Log in</button>;
     }
   }
 
@@ -58,7 +84,9 @@ export default function HomePage() {
           value={loginInfo.email || ""}
           onChange={handleForm}
           placeholder="email"
+          disabled={loading}
           required
+          data-identifier="input-email"
         />
         <input
           id="password"
@@ -67,11 +95,13 @@ export default function HomePage() {
           value={loginInfo.password || ""}
           onChange={handleForm}
           placeholder="password"
+          disabled={loading}
           required
+          data-identifier="input-password"
         />
         <LogInButton />
       </form>
-      <Link to="/signup">Don't have an account? Sign up!</Link>
+      <Link to="/signup" data-identifier="sign-up-action">Don't have an account? Sign up!</Link>
     </HomePageStyled>
   );
 }

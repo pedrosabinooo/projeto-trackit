@@ -65,6 +65,10 @@ const GlobalStyle = createGlobalStyle`
         color: ${textColor};
     }
     
+    body {
+        background: ${backgroundColor};
+    }
+    
     button {
         font-family: 'Lexend Deca', sans-serif;
         display: flex;
@@ -78,6 +82,9 @@ const GlobalStyle = createGlobalStyle`
         border-radius: 5px;
         color: #FFFFFF;
         background: ${accentColor};
+        &:disabled{
+            cursor: default;
+        }
     }
     
     input {

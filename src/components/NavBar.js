@@ -5,14 +5,16 @@ import UserPhoto from "../assets/images/user-photo-default64.png";
 import { navBarHeight } from "../constants/dimensions";
 import { useContext } from "react";
 import UserContext from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function NavBar() {
   const { userInfo } = useContext(UserContext);
+  const navigate = useNavigate();
   
   return (
     <NavBarStyled>
-      <img src={MiniLogo} alt="Logo" />
-      <img src={!userInfo.image ? UserPhoto : userInfo.image} alt="ProfilePic" />
+      <img src={MiniLogo} alt="Logo" onClick={()=>navigate("/")} className="logo" />
+      <img src={!userInfo.image ? UserPhoto : userInfo.image} alt="Avatar" data-identifier="avatar" />
     </NavBarStyled>
   );
 }
@@ -33,5 +35,8 @@ const NavBarStyled = styled.div`
   img {
     align-items: center;
     height: 55px;
+  }
+  .logo {
+    cursor: pointer;
   }
 `;
