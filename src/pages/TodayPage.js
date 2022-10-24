@@ -32,9 +32,6 @@ export default function TodayPage() {
   if (!userInfoFromLocalStorage) navigate("/");
 
   useEffect(() => {
-    console.log(`${BASE_URL}habits/today`)
-    console.log(config)
-    console.log(percentage)
     axios
       .get(`${BASE_URL}habits/today`, config)
       .then((res) => {
@@ -56,7 +53,7 @@ export default function TodayPage() {
         "",
         config
       )
-      .then(() => console.log(habit.done ? "unchecked" : "checked"))
+      .then(() => "")
       .catch((err) => console.log(err.response.data));
   }
 

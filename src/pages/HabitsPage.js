@@ -34,7 +34,6 @@ export default function HabitsPage() {
 
   if (!userInfoFromLocalStorage) navigate("/");
 
-  // Buscando a lista de hábitos
   useEffect(() => {
     axios
       .get(`${BASE_URL}habits`, config)
@@ -57,13 +56,9 @@ export default function HabitsPage() {
 
   function createHabit() {
     const body = { name: newHabit.name, days: [...selectedDays] };
-    // const body = { name: "Wake up", days: [1,2,3,4,5,6,7] }
-    console.log (body)
-    console.log (config)
     axios
       .post(`${BASE_URL}habits`, body, config)
       .then((r) => {
-        console.log (r.data)
         setHabits([...habits, r.data]);
         setIsNewHabitContainerOpen(!isNewHabitContainerOpen);
         setNewHabitLoading(false);
