@@ -50,10 +50,10 @@ export default function TodayPage() {
     axios
       .post(
         `${BASE_URL}habits/${habit.id}/${habit.done ? "uncheck" : "check"}`,
-        "",
+        {id: habit.id},
         config
       )
-      .then(() => "")
+      .then(() => setTodayHabits([...todayHabits.map(h => habit.id===h.id ? h.done=!habit.done : "")]))
       .catch((err) => console.log(err.response.data));
   }
 
