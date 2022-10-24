@@ -1,49 +1,32 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Loader from "../components/Loader";
+import { ThreeDots } from "react-loader-spinner";
 import Logo from "../components/Logo";
 import { accentColor } from "../constants/colors";
 import { BASE_URL } from "../constants/urls";
-import UserContext from "../contexts/UserContext";
 
 export default function SignUpPage() {
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const [userInfo, setUserInfo] = useState(undefined);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  function signup(e) {
+  function signUp(e) {
     e.preventDefault();
-    setLoading(!loading);
     axios
       .post(`${BASE_URL}auth/sign-up`, userInfo)
-      .then((res) => {
-        console.log(res.data);
-        setLoading(!loading);
-        navigate("/"); //FIXME Ajustar erro da foto
-      })
+      .then(() => navigate("/"))
       .catch((err) => {
-        setLoading(!loading); //FIXME Botão e input não estão voltando a ficar habilitados
-        setUserInfo({});
-        alert(err.response.data);
+        alert(err.response.data.message);
+        resetForm();
       });
+    setLoading(true);
   }
-  
-  function SignUpButton() {
-    if (loading) {
-      return (
-        <button type="submit" disabled={loading}>
-          <Loader />
-        </button>
-      );
-    } else {
-      return (
-        <button type="submit" onClick={() => setLoading(!loading)}>
-          Sign up
-        </button>
-      );
-    }
+
+  function resetForm() {
+    setUserInfo({});
+    setLoading(false);
   }
 
   function handleForm(e) {
@@ -51,13 +34,13 @@ export default function SignUpPage() {
   }
 
   return (
-    <HomePageStyled>
+    <SignUpPageStyled>
       <Logo />
-      <form onSubmit={signup}>
+      <form onSubmit={signUp}>
         <input
           id="email"
           name="email"
-          value={userInfo.email || ""}
+          value={userInfo?.email || ""}
           onChange={handleForm}
           placeholder="email"
           disabled={loading}
@@ -68,7 +51,7 @@ export default function SignUpPage() {
           id="password"
           type="password"
           name="password"
-          value={userInfo.password || ""}
+          value={userInfo?.password || ""}
           onChange={handleForm}
           placeholder="password"
           disabled={loading}
@@ -78,7 +61,7 @@ export default function SignUpPage() {
         <input
           id="name"
           name="name"
-          value={userInfo.name || ""}
+          value={userInfo?.name || ""}
           onChange={handleForm}
           placeholder="name"
           disabled={loading}
@@ -88,24 +71,30 @@ export default function SignUpPage() {
         <input
           id="image"
           name="image"
-          value={userInfo.image || ""}
+          value={userInfo?.image || ""}
           onChange={handleForm}
           placeholder="image"
           disabled={loading}
+          required
           data-identifier="input-photo"
         />
-        <SignUpButton />
+        <button type="submit" disabled={loading}>
+          {loading ? <ThreeDots color="white" /> : "Sign up"}
+        </button>
       </form>
-      <Link to="/" data-identifier="back-to-login-action">Already have an account? Log in!</Link>
-    </HomePageStyled>
+      <Link to="/" data-identifier="back-to-login-action">
+        Already have an account? Log in!
+      </Link>
+    </SignUpPageStyled>
   );
 }
 
-const HomePageStyled = styled.div`
+const SignUpPageStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: white;
   height: 100vh;
   gap: 40px;
   a {

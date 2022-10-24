@@ -6,14 +6,14 @@ import SignUpPage from "./pages/SignUpPage";
 import HabitsPage from "./pages/HabitsPage";
 import TodayPage from "./pages/TodayPage";
 import HistoryPage from "./pages/HistoryPage";
-import { HabitsCompletionProvider } from "./contexts/HabitsCompletionContext";
+import { HabitsProgressionProvider } from "./contexts/HabitsProgressionContext";
 
 export default function App() {
   return (
     <>
       <GlobalStyle />
       <UserProvider>
-        <HabitsCompletionProvider>
+        <HabitsProgressionProvider>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -23,7 +23,7 @@ export default function App() {
               <Route path="/history" element={<HistoryPage />} />
             </Routes>
           </BrowserRouter>
-        </HabitsCompletionProvider>
+        </HabitsProgressionProvider>
       </UserProvider>
     </>
   );

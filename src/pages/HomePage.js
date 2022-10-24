@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Loader from "../components/Loader";
+import { ThreeDots } from "react-loader-spinner";
 import Logo from "../components/Logo";
 import { accentColor } from "../constants/colors";
 import { BASE_URL } from "../constants/urls";
@@ -14,32 +14,11 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   var hours = 12; // to clear the localStorage after "hours" hours
-  //   var now = new Date().getTime();
-  //   var setupTime = localStorage.getItem("setupTime");
-  //   if (setupTime === null) {
-  //     localStorage.setItem("setupTime", now);
-  //   } else {
-  //     if (now - setupTime > hours * 60 * 60 * 1000) {
-  //       localStorage.clear();
-  //       localStorage.setItem("setupTime", now);
-  //     }
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   const userInfoStringfied = localStorage.getItem("user");
-  //   if (userInfoStringfied) {
-  //     const userInfoParsed = JSON.parse(userInfoStringfied);
-  //     setUserInfo(userInfoParsed);
-  //     setLoginInfo({
-  //       email: userInfoParsed.email,
-  //       password: userInfoParsed.password,
-  //     });
-  //     login();
-  //   }
-  // }, [login, setLoginInfo, setUserInfo]);
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate("/today");
+    }
+  }, [navigate]);
 
   function login(e) {
     e.preventDefault();
@@ -48,26 +27,15 @@ export default function HomePage() {
       .post(`${BASE_URL}auth/login`, body)
       .then((r) => {
         setUserInfo({ ...r.data });
-        // localStorage.setItem("user", JSON.stringify({ ...r.data }));
+        localStorage.setItem("user", JSON.stringify({ ...r.data }));
+        
         navigate("/today");
       })
-      .catch((e) => {
-        console.log(e.response.data);
-        setLoading(!loading);
+      .catch(() => {
+        alert("There's been an issue. Check your login info and try again.");
+        setLoading(false);
       });
-    setLoading(!loading);
-  }
-
-  function LogInButton() {
-    if (loading) {
-      return (
-        <button type="submit" disabled={loading} data-identifier="login-btn">
-          <Loader />
-        </button>
-      );
-    } else {
-      return <button type="submit" data-identifier="login-btn">Log in</button>;
-    }
+    setLoading(true);
   }
 
   function handleForm(e) {
@@ -99,9 +67,13 @@ export default function HomePage() {
           required
           data-identifier="input-password"
         />
-        <LogInButton />
+        <button type="submit" disabled={loading} data-identifier="login-btn">
+          {loading ? <ThreeDots color="white" /> : "Log in"}
+        </button>
       </form>
-      <Link to="/signup" data-identifier="sign-up-action">Don't have an account? Sign up!</Link>
+      <Link to="/signup" data-identifier="sign-up-action">
+        Don't have an account? Sign up!
+      </Link>
     </HomePageStyled>
   );
 }
@@ -111,6 +83,7 @@ const HomePageStyled = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: white;
   height: 100vh;
   gap: 40px;
   a {

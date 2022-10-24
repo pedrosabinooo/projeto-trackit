@@ -14,7 +14,7 @@ export default function NavBar() {
   return (
     <NavBarStyled>
       <img src={MiniLogo} alt="Logo" onClick={()=>navigate("/")} className="logo" />
-      <img src={!userInfo.image ? UserPhoto : userInfo.image} alt="Avatar" data-identifier="avatar" />
+      <img src={!userInfo.image ? UserPhoto : userInfo.image} alt="Avatar" data-identifier="avatar" className="avatar" />
     </NavBarStyled>
   );
 }
@@ -38,5 +38,10 @@ const NavBarStyled = styled.div`
   }
   .logo {
     cursor: pointer;
+  }
+  .avatar {
+    clip-path: circle();
+    height: auto;
+    max-width: 55px;
   }
 `;
